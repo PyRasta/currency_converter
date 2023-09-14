@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  postgres:
+    build: databases/postgres/
+    restart: unless-stopped
+    ports:
+      - "2345:5432"
+
+  redis:
+    build: databases/redis/
+    command: redis-server
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  celery_worker:
+    build:
+      context: app/
+    command: celery -A rate:celery worker -l info
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+  celery_beat:
+    build:
+      context: app/
+    command: celery -A rate:celery beat -l info
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - celery_worker
+
+  app:
+    build: app/
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+      - celery_worker
+      - celery_beat
+
+  start:
+    build: app/
+    command: ./start.sh
+    depends_on:
+      - postgres
+      - redis
+      - celery_worker
+      - celery_beat
