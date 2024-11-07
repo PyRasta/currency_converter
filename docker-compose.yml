@@ -19,6 +19,8 @@ services:
       context: app/
     command: celery -A rate:celery worker -l info
     restart: unless-stopped
+    env_file:
+      .env
     depends_on:
       - redis
 
@@ -27,6 +29,8 @@ services:
       context: app/
     command: celery -A rate:celery beat -l info
     restart: unless-stopped
+    env_file:
+      .env
     depends_on:
       - redis
       - celery_worker
@@ -37,6 +41,8 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    env_file:
+      .env
     depends_on:
       - postgres
       - redis
@@ -46,6 +52,8 @@ services:
   start:
     build: app/
     command: ./start.sh
+    env_file:
+      .env
     depends_on:
       - postgres
       - redis

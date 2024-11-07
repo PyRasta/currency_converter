@@ -1,0 +1,14 @@
+import os
+
+POSTGRES_HOST = os.environ.get('POSTGRES_HOST')
+POSTGRES_PORT = os.environ.get('POSTGRES_PORT')
+POSTGRES_USER = os.environ.get('POSTGRES_USER')
+POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
+POSTGRES_DATABASE = os.environ.get('POSTGRES_DATABASE')
+
+REDIS_URL = os.environ.get('REDIS_URL')
+REDIS_URL_RESULT_BACKEND = os.environ.get('REDIS_URL_RESULT_BACKEND')
+
+ACCESS_KEY = os.environ.get('ACCESS_KEY')
+
+TIME_UPDATE_RATES_SEC = os.environ.get('TIME_UPDATE_RATES_SEC')
